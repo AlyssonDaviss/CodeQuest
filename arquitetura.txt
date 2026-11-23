@@ -1,0 +1,49 @@
+```
+codequest/
+│
+├── data/                        # Arquivos de dados, persistência e assets
+│   ├── conteudo_trilha.json     # Definição das trilhas, regiões e desafios (CarregadorDeConteudo)
+│   └── save_slot_1.json         # Arquivo de salvamento do progresso do jogador
+│
+├── docs/                        # Documentação do projeto
+│   ├── arquitetura.png          # Diagrama arquitetural (Tkinter -> Controle -> Domínio)
+│   ├── diagrama_classes.md      # Diagrama UML atualizado com Padrões e Mixins
+│   └── README.md                # Justificativas de design, uso de SOLID e divisão do grupo
+│
+├── src/                         # Código-fonte principal
+│   │
+│   ├── presentation/            # Camada de Apresentação (Tkinter) - Sem regras de negócio
+│   │   ├── app.py               # Ponto de entrada da interface gráfica
+│   │   ├── tela_trilha.py       # Exibe o mapa, vida e XP do jogador
+│   │   ├── tela_batalha.py      # Interface de turnos e ações
+│   │   └── janela_editor.py     # Modal com o enunciado do desafio e entrada de código
+│   │
+│   ├── application/             # Camada de Aplicação / Controle
+│   │   └── controlador_jogo.py  # Orquestrador que liga a UI ao Domínio e à Infraestrutura
+│   │
+│   ├── domain/                  # Camada de Domínio (POO pura, independente de UI/Infra)
+│   │   ├── personagens.py       # Classes Personagem, Player, Inimigo, Boss
+│   │   ├── itens.py             # Classes Item, ItemChave, Equipamento, Consumivel, Inventario
+│   │   ├── mundo.py             # Classes Trilha, Regiao, Casa (e subtipos), Partida
+│   │   ├── combate.py           # Classes Batalha, Acao
+│   │   ├── codigo.py            # Classes Desafio, EditorDeCodigo
+│   │   ├── interfaces.py        # Abstrações (ex: IAvaliadorCodigo) garantindo DIP
+│   │   ├── enums.py             # StatusPersonagem, TipoAcao, EstadoPartida
+│   │   ├── mixins.py            # ObservavelMixin (Padrão Observer)
+│   │   └── erros.py             # Exceções personalizadas (CodeQuestError, etc.)
+│   │
+│   └── infrastructure/          # Camada de Infraestrutura (I/O, processos externos)
+│       ├── avaliador_local.py   # Implementa IAvaliadorCodigo rodando subprocessos com timeout
+│       ├── avaliador_mock.py    # Dublê de IAvaliadorCodigo para testes rápidos
+│       └── repositorio_json.py  # Implementa leitura/escrita da classe Salvar e CarregadorDeConteudo
+│
+├── tests/                       # Suíte de testes automatizados (pytest)
+│   ├── conftest.py              # Fixtures globais (ex: instâncias de Player e Inimigo)
+│   ├── test_combate.py          # Testes polimórficos de ataques e uso de itens
+│   ├── test_avaliador.py        # Testes do subprocesso de código (isolamento e timeout)
+│   └── test_inventario.py       # Testes de limites de capacidade e exceções
+│
+├── main.py                      # Ponto de entrada raiz (inicializa as camadas e chama a UI)
+├── pyproject.toml               # Gerenciamento de dependências e empacotamento usando o 'uv'
+└── .gitignore                   # Arquivos ignorados pelo git (ex: __pycache__, saves locais)
+```
