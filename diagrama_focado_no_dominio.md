@@ -1,3 +1,4 @@
+```mermaid
 classDiagram
     %% ===== Personagens =====
     class Personagem {
@@ -334,3 +335,5 @@ classDiagram
     FabricaDeEntidades ..> Inimigo : cria
     FabricaDeEntidades ..> Boss : cria
     FabricaDeEntidades ..> Item : cria
+
+```
