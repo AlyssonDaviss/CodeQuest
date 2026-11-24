@@ -1,4 +1,3 @@
-```mermaid
 classDiagram
     %% ===== Personagens =====
     class Personagem {
@@ -50,7 +49,20 @@ classDiagram
         <<abstract>>
         -str nome
         -str descricao
-        -bool empilhavel
+    }
+
+    class Equipavel {
+        <<mixin>>
+        +aplicar_bonus(Player jogador) void
+        +remover_bonus(Player jogador) void
+    }
+
+    class Empilhavel {
+        <<mixin>>
+        -int quantidade
+        +aumentar(int valor) void
+        +reduzir(int valor) void
+        +esta_esgotado() bool
     }
 
     class ItemChave {
@@ -68,9 +80,7 @@ classDiagram
 
     class Consumivel {
         -int efeito
-        -int quantidade
         +usar(Player jogador) void
-        +esta_esgotado() bool
     }
 
     class Inventario {
@@ -92,11 +102,24 @@ classDiagram
 
     %% ===== Ações e desafios =====
     class Acao {
+        <<abstract>>
         -str nome
-        -str tipo
         -bool desbloqueada
         -Desafio desafio
         +executar(Player jogador, Inimigo alvo) bool
+        #aplicar_efeito(Player jogador, Inimigo alvo) void
+    }
+
+    class Atacar {
+        #aplicar_efeito(Player jogador, Inimigo alvo) void
+    }
+
+    class Defender {
+        #aplicar_efeito(Player jogador, Inimigo alvo) void
+    }
+
+    class UsarPoder {
+        #aplicar_efeito(Player jogador, Inimigo alvo) void
     }
 
     class Desafio {
@@ -157,11 +180,14 @@ classDiagram
         +iniciar(Player jogador) void
         +reiniciar_desafio() void
         +pode_concluir() bool
-        +concluir() void
+        +concluir(bool aprovado) void
+        #tratar_aprovacao() void
+        #tratar_reprovacao() void
     }
 
     class CasaComum {
         +pode_concluir() bool
+        #tratar_reprovacao() void
     }
 
     class CasaDeEvento {
@@ -170,12 +196,14 @@ classDiagram
         +conceder_recompensa(Player jogador) void
         +perder_recompensa() void
         +derrotar_inimigo(Inimigo inimigo) void
+        #tratar_reprovacao() void
     }
 
     class CasaDeBatalha {
         -Inimigo inimigo
         +pode_concluir() bool
         +iniciar_batalha(Player jogador) Batalha
+        #tratar_reprovacao() void
     }
 
     class Batalha {
@@ -186,6 +214,12 @@ classDiagram
         +terminou() bool
         +vencedor() Personagem
         -penalizar_reprovacao() void
+    }
+
+    class FabricaDeEntidades {
+        +criar_inimigo(Regiao regiao) Inimigo
+        +criar_boss(Regiao regiao) Boss
+        +criar_item(str tipo) Item
     }
 
     %% ===== Partida e persistência =====
@@ -204,8 +238,24 @@ classDiagram
         +esta_concluida() bool
     }
 
-    class Salvar {
+    class IRepositorioProgresso {
+        <<interface>>
+        +salvar(Partida partida) bool
+        +carregar() Partida
+        +atualizar(Partida partida) bool
+        +excluir() bool
+    }
+
+    class RepositorioJSON {
         -str caminho_arquivo
+        +salvar(Partida partida) bool
+        +carregar() Partida
+        +atualizar(Partida partida) bool
+        +excluir() bool
+    }
+
+    class RepositorioMemoria {
+        -Partida partida_guardada
         +salvar(Partida partida) bool
         +carregar() Partida
         +atualizar(Partida partida) bool
@@ -219,11 +269,18 @@ classDiagram
     Item <|-- ItemChave
     Item <|-- Equipamento
     Item <|-- Consumivel
+    Equipavel <|-- Equipamento
+    Empilhavel <|-- Consumivel
+    Acao <|-- Atacar
+    Acao <|-- Defender
+    Acao <|-- UsarPoder
     Casa <|-- CasaComum
     Casa <|-- CasaDeEvento
     Casa <|-- CasaDeBatalha
     IAvaliadorCodigo <|.. AvaliadorSubprocessoLocal
     IAvaliadorCodigo <|.. AvaliadorMock
+    IRepositorioProgresso <|.. RepositorioJSON
+    IRepositorioProgresso <|.. RepositorioMemoria
 
     %% ===== Player, inventário e ações =====
     Player "1" *-- "1" Inventario : possui
@@ -268,5 +325,12 @@ classDiagram
     Partida "1" --> "1" Trilha : percorre
     Partida "0..1" --> "1" Casa : casa atual
     Partida "1" --> "0..1" Batalha : batalha em curso
-    Salvar ..> Partida : persiste o progresso
-```
+    Partida ..> IRepositorioProgresso : depende de
+    IRepositorioProgresso ..> Partida : persiste o progresso
+
+    %% ===== Fábrica =====
+    Partida ..> FabricaDeEntidades : usa
+    FabricaDeEntidades ..> Regiao : lê os dados
+    FabricaDeEntidades ..> Inimigo : cria
+    FabricaDeEntidades ..> Boss : cria
+    FabricaDeEntidades ..> Item : cria
