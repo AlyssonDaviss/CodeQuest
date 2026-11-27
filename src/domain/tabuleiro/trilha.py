@@ -1,5 +1,6 @@
 from .regiao import Regiao
 from .casa import Casa
+from nucleo.erros import *
 
 class Trilha:
     def __init__(self, regioes: list[Regiao]) -> None:
@@ -30,8 +31,13 @@ class Trilha:
 
     # Movimentação
     def avancar(self) -> Casa:
-        ...
-        # Falta lanaçar os erros aqui
+        """Move para a próxima casa e a devolve.
+
+        Raises:
+            FimDaTrilhaErro: se já está na última casa da última região.
+        """
+        if not self.tem_proxima_casa():
+            raise FimDaTrilhaErro()
 
         if self._esta_na_ultima_casa_da_regiao():
             self._i_regiao += 1
