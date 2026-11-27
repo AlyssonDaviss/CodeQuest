@@ -1,0 +1,48 @@
+# --- Python: bytecode e caches ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Ambiente virtual (uv/venv) ---
+.venv/
+venv/
+env/
+
+# --- Testes e cobertura ---
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# --- Ferramentas (ruff, mypy etc.) ---
+.ruff_cache/
+.mypy_cache/
+.pytype/
+
+# --- Empacotamento / build ---
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Variáveis de ambiente e segredos ---
+.env
+.env.*
+
+# --- Editores ---
+.vscode/
+.idea/
+*.swp
+
+# --- Sistema operacional (Windows/macOS) ---
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# --- Logs e temporários ---
+*.log
+*.tmp
+
+# --- Progresso salvo do jogador (descomente quando existir) ---
+# data/saves/

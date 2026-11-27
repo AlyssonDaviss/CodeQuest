@@ -23,6 +23,11 @@ class CodeQuestErro(Exception):
 
 # Tabuleiro
 
+class ErroTabuleiro(CodeQuestErro):
+    """Erro ao navegar ou montar o tabuleiro."""
+
+    mensagem_padrao = "Erro no tabuleiro."
+
 class FimDaTrilhaErro(ErroTabuleiro):
     """Tentativa de avançar quando não existe próxima casa."""
 

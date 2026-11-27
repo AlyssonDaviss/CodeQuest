@@ -1,11 +1,13 @@
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractmethod
+
 
 class Casa(ABC):
-    """unidade da região, com um desafio de programação."""
-    def __ini__(self, numero: int, desafio) -> None:
-          self._numero = numero
-          self._desafio = desafio
-          self._concluida = False
+    """Unidade da região, com um desafio de programação."""
+
+    def __init__(self, numero: int, desafio) -> None:
+        self._numero = numero
+        self._desafio = desafio
+        self._concluida = False
 
     @property
     def numero(self) -> int:
@@ -13,30 +15,29 @@ class Casa(ABC):
 
     @property
     def desafio(self):
-         return self._desafio
+        return self._desafio
 
     @property
     def concluida(self) -> bool:
-         return self._concluida
+        return self._concluida
 
     def concluir(self, aprovado: bool) -> None:
-         """Define se a casa foi concluida ou não"""
-         if aprovado:
-              self._concluida = True
-              self._tratar_aprovacao()
-         else:
-              self._tratar_reprovacao()
+        """Repassa o resultado do desafio ao gancho correspondente."""
+        if aprovado:
+            self._tratar_aprovacao()
+        else:
+            self._tratar_reprovacao()
 
     def reiniciar(self) -> None:
-        """Reinicia a casa"""
+        """Reinicia a casa."""
         self._concluida = False
 
-    def _tratar_aprovacao(self):
-         """Faz passar de casa e receber as reconpensas"""
-         pass
+    def _tratar_aprovacao(self) -> None:
+        """Marca a casa como concluída e dá as recompensas."""
+        self._concluida = True
+        ...  # recompensas
 
-    @abstractclassmethod
-    def _tratar_reprovacao(self):
-         """A definir"""
-         pass
+    @abstractmethod
+    def _tratar_reprovacao(self) -> None:
+        """A definir."""
 
