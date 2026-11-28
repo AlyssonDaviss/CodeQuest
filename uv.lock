@@ -1,8 +1,6 @@
 version = 1
-revision = 3
-requires-python = ">=3.14"
-
-[manifest]
+revision = 5
+requires-python = ">=3.12"
 
 [manifest.dependency-groups]
 dev = [{ name = "pytest", specifier = ">=9.2.0" }]
