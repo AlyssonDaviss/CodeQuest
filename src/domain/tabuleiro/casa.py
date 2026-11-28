@@ -21,23 +21,25 @@ class Casa(ABC):
     def concluida(self) -> bool:
         return self._concluida
 
-    def concluir(self, aprovado: bool) -> None:
-        """Repassa o resultado do desafio ao gancho correspondente."""
+    def registrar_resultado(self, aprovado: bool) -> None:
+        """Repassa o resultado do código do desafio ao gancho correspondente."""
         if aprovado:
             self._tratar_aprovacao()
         else:
             self._tratar_reprovacao()
 
     def reiniciar(self) -> None:
-        """Reinicia a casa."""
+        """Volta a casa ao estado de não concluída."""
         self._concluida = False
 
-    def _tratar_aprovacao(self) -> None:
-        """Marca a casa como concluída e dá as recompensas."""
+    def _marcar_concluida(self) -> None:
+        """Marca a casa como concluída (as filhas chamam quando for a hora)."""
         self._concluida = True
-        ...  # recompensas
+
+    @abstractmethod
+    def _tratar_aprovacao(self) -> None:
+        """O que acontece quando o código do desafio é aprovado."""
 
     @abstractmethod
     def _tratar_reprovacao(self) -> None:
-        """A definir."""
-
+        """O que acontece quando o código do desafio é reprovado."""
